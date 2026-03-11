@@ -2,6 +2,7 @@ package jsonschema
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"reflect"
 	"strings"
@@ -111,6 +112,8 @@ func getSchema(typ reflect.Type) (*Schema, error) {
 		}
 		sch.Type = append(sch.Type, "null")
 		return sch, nil
+	case typ.Kind() == reflect.Slice:
+		return nil, errors.ErrUnsupported
 	}
 	return nil, fmt.Errorf("unknown type for schema: %s", typ)
 }
